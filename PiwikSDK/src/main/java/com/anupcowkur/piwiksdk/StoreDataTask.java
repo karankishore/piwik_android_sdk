@@ -1,0 +1,70 @@
+package com.anupcowkur.piwiksdk;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+
+import java.util.Calendar;
+import java.util.Map;
+
+public class StoreDataTask extends AsyncTask<Void, Void, Void> {
+
+    private Context context;
+    private String info;
+    private Map<String, String> extraInfo;
+
+    public StoreDataTask(Context context, String info, Map<String, String> extraInfo) {
+        this.context = context;
+        this.info = info;
+        this.extraInfo = extraInfo;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+        PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
+        SQLiteDatabase sqLiteDatabase = piwikDataManager.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PiwikDataManager.EVT_TABLE_COL_INFO, info);
+        contentValues.put(PiwikDataManager.EVT_TABLE_COL_EXTRA_INFO, prepareExtraInfo());
+        contentValues.put(PiwikDataManager.EVT_TABLE_COL_TIMESTAMP, getCurrentTimestamp());
+        sqLiteDatabase.insert(PiwikDataManager.EVT_TABLE, null, contentValues);
+        return null;
+    }
+
+    private String getCurrentTimestamp() {
+        Calendar calendar = Calendar.getInstance();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("h=");
+        stringBuilder.append(calendar.get(Calendar.HOUR_OF_DAY));
+        stringBuilder.append("&m=");
+        stringBuilder.append(calendar.get(Calendar.MINUTE));
+        stringBuilder.append("&s=");
+        stringBuilder.append(calendar.get(Calendar.SECOND));
+        return stringBuilder.toString();
+    }
+
+    private String prepareExtraInfo(){
+        int index = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Map.Entry<String, String> cursor: extraInfo.entrySet()){
+            stringBuilder.append("\"");
+            stringBuilder.append(++index);
+            stringBuilder.append("\"");
+            stringBuilder.append(":");
+            stringBuilder.append("[");
+            stringBuilder.append("\"");
+            stringBuilder.append(cursor.getKey());
+            stringBuilder.append("\"");
+            stringBuilder.append(",");
+            stringBuilder.append("\"");
+            stringBuilder.append(cursor.getValue());
+            stringBuilder.append("\"");
+            stringBuilder.append("]");
+            if(extraInfo.size()>1){
+                stringBuilder.append(",");
+            }
+        }
+        return stringBuilder.toString();
+    }
+}

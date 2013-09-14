@@ -1,31 +1,27 @@
 package com.anupcowkur.piwiksdk;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import java.util.Map;
 
 public class PiwikClient {
 
-    public static void initPiwik(Context context, String serverUrl){
+    public static void initPiwik(Context context, String serverUrl) {
 
     }
 
-    public static void trackEvent(Context context, String eventInfo, String extraInfo){
+    public static void trackEvent(Context context, String eventInfo, Map<String, String> extraInfo) {
 
     }
 
-    public static void trackView(Context context, String viewInfo, String extraInfo){
+    public static void trackView(Context context, String viewInfo, Map<String, String> extraInfo) {
 
     }
 
-    public static void trackCrash(Context context, String crashInfo, String extraInfo){
+    public static void trackCrash(Context context, String crashInfo, Map<String, String> extraInfo) {
 
     }
 
-    private static void storeData(Context context){
-//        PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
-//
-//        SQLiteDatabase sqLiteDatabase = piwikDataManager.getWritableDatabase();
-
-
+    private static void storeData(Context context, String eventInfo, Map<String, String> extraInfo) {
+        new StoreDataTask(context, eventInfo, extraInfo).execute();
     }
 }
