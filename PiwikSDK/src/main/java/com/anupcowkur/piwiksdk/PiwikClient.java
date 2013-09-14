@@ -5,12 +5,14 @@ import java.util.Map;
 
 public class PiwikClient {
 
-    public static void initPiwik(Context context, String serverUrl) {
-
+    public static void initPiwik(Context context, String serverUrl, String userId) {
+        if(userId == null){
+            userId = generateUserId();
+        }
     }
 
     public static void trackEvent(Context context, String eventInfo, Map<String, String> extraInfo) {
-
+        storeData(context, eventInfo, extraInfo);
     }
 
     public static void trackView(Context context, String viewInfo, Map<String, String> extraInfo) {
@@ -23,5 +25,9 @@ public class PiwikClient {
 
     private static void storeData(Context context, String eventInfo, Map<String, String> extraInfo) {
         new StoreDataTask(context, eventInfo, extraInfo).execute();
+    }
+
+    private static String generateUserId(){
+        return " ";
     }
 }

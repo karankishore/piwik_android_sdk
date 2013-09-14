@@ -2,8 +2,10 @@ package com.anupcowkur.piwiksdk;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -30,6 +32,20 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         contentValues.put(PiwikDataManager.EVT_TABLE_COL_TIMESTAMP, getCurrentTimestamp());
         sqLiteDatabase.insert(PiwikDataManager.EVT_TABLE, null, contentValues);
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
+        SQLiteDatabase sqLiteDatabase = piwikDataManager.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + PiwikDataManager.EVT_TABLE, null);
+        if(cursor.moveToFirst()){
+            while(cursor.isAfterLast() == false){
+                Log.d(StoreDataTask.class.getName(), " rec: " + cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_INFO)));
+                cursor.moveToNext();
+            }
+        }
+        super.onPostExecute(aVoid);
     }
 
     private String getCurrentTimestamp() {
