@@ -21,7 +21,6 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-
     </application>
 
 </manifest>
