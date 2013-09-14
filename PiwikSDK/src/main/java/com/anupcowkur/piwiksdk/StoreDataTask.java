@@ -42,8 +42,8 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
         SQLiteDatabase sqLiteDatabase = piwikDataManager.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + PiwikDataManager.EVT_TABLE, null);
-        if(cursor.moveToFirst()){
-            while(cursor.isAfterLast() == false){
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
                 Log.d(StoreDataTask.class.getName(), " rec: " + cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_INFO)));
                 cursor.moveToNext();
             }
@@ -63,31 +63,33 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         return stringBuilder.toString();
     }
 
-    private String prepareExtraInfo(){
+    private String prepareExtraInfo() {
         int index = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        for(Map.Entry<String, String> cursor: extraInfo.entrySet()){
-            stringBuilder.append("\"");
-            stringBuilder.append(++index);
-            stringBuilder.append("\"");
-            stringBuilder.append(":");
-            stringBuilder.append("[");
-            stringBuilder.append("\"");
-            stringBuilder.append(cursor.getKey());
-            stringBuilder.append("\"");
-            stringBuilder.append(",");
-            stringBuilder.append("\"");
-            stringBuilder.append(cursor.getValue());
-            stringBuilder.append("\"");
-            stringBuilder.append("]");
-            if(extraInfo.size()>1){
+        if (extraInfo != null) {
+            for (Map.Entry<String, String> cursor : extraInfo.entrySet()) {
+                stringBuilder.append("\"");
+                stringBuilder.append(++index);
+                stringBuilder.append("\"");
+                stringBuilder.append(":");
+                stringBuilder.append("[");
+                stringBuilder.append("\"");
+                stringBuilder.append(cursor.getKey());
+                stringBuilder.append("\"");
                 stringBuilder.append(",");
+                stringBuilder.append("\"");
+                stringBuilder.append(cursor.getValue());
+                stringBuilder.append("\"");
+                stringBuilder.append("]");
+                if (extraInfo.size() > 1) {
+                    stringBuilder.append(",");
+                }
             }
         }
         return stringBuilder.toString();
     }
 
-    private String getUserIdFromPreferences(){
+    private String getUserIdFromPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PiwikDataManager.PREF_USER_ID, null);
     }
 }

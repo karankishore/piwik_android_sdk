@@ -10,8 +10,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
 import java.util.ArrayList;
 
 public class PiwikSyncAdapter extends AbstractThreadedSyncAdapter {

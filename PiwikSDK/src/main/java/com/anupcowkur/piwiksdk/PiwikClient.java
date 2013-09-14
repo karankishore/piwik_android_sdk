@@ -11,7 +11,7 @@ import java.util.Map;
 public class PiwikClient {
 
     public static void initPiwik(Context context, String serverUrl, String userId) {
-        if(userId == null){
+        if (userId == null) {
             userId = generateUserId();
             Log.d(PiwikClient.class.getName(), " userId: " + userId);
         }
@@ -34,12 +34,12 @@ public class PiwikClient {
         new StoreDataTask(context, eventInfo, extraInfo).execute();
     }
 
-    private static String generateUserId(){
+    private static String generateUserId() {
         SecureRandom random = new SecureRandom();
         return new BigInteger(130, random).toString(16);
     }
 
-    private static void storeServerUrlToPreferences(Context context, String serverUrl, String userId){
+    private static void storeServerUrlToPreferences(Context context, String serverUrl, String userId) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_SERVER_URL, serverUrl).commit();
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_USER_ID, userId).commit();
     }
