@@ -11,6 +11,7 @@ public class PiwikDataManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "piwik.db";
     private static final int DATABASE_VERSION = 1;
     public static final String EVT_TABLE = "event";
+    public static final String EVT_TABLE_COL_USER_ID = "user_id";
     public static final String EVT_TABLE_COL_INFO = "info";
     public static final String EVT_TABLE_COL_EXTRA_INFO = "extra_info";
     public static final String EVT_TABLE_COL_TIMESTAMP = "timestamp";
