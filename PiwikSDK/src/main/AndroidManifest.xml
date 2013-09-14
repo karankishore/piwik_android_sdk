@@ -23,4 +23,10 @@
         </service>
     </application>
 
+    <provider
+        android:authorities="com.anupcowkur.piwiksdk.provider.piwikdbitems"
+        android:export="false"
+        android:name=".PiwikContentProvider"
+        android:syncable="true" />
+
 </manifest>
