@@ -90,7 +90,7 @@ public class PiwikContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int delCount = 0;
+        int delCount;
         switch (URI_MATCHER.match(uri)) {
             case PIWIK_ITEM_LIST:
                 delCount = db.delete(PiwikDataManager.EVT_TABLE, selection, selectionArgs);
@@ -105,10 +105,6 @@ public class PiwikContentProvider extends ContentProvider {
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
-        }
-        // notify all listeners of changes:
-        if (delCount > 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
         }
         return delCount;
     }
