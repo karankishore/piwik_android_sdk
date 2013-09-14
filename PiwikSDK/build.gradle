@@ -23,4 +23,6 @@ android {
 }
 
 dependencies {
+    compile 'com.koushikdutta.ion:ion:1.1.5'
+    compile 'com.squareup:otto:1.3.4'
 }
