@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -13,13 +14,14 @@ import java.util.Map;
 public class StoreDataTask extends AsyncTask<Void, Void, Void> {
 
     private Context context;
-    private String info;
+    private String info, userId;
     private Map<String, String> extraInfo;
 
     public StoreDataTask(Context context, String info, Map<String, String> extraInfo) {
         this.context = context;
         this.info = info;
         this.extraInfo = extraInfo;
+        this.userId = getUserIdFromPreferences();
     }
 
     @Override
@@ -27,6 +29,7 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
         SQLiteDatabase sqLiteDatabase = piwikDataManager.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(PiwikDataManager.EVT_TABLE_COL_USER_ID, userId);
         contentValues.put(PiwikDataManager.EVT_TABLE_COL_INFO, info);
         contentValues.put(PiwikDataManager.EVT_TABLE_COL_EXTRA_INFO, prepareExtraInfo());
         contentValues.put(PiwikDataManager.EVT_TABLE_COL_TIMESTAMP, getCurrentTimestamp());
@@ -82,5 +85,9 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
             }
         }
         return stringBuilder.toString();
+    }
+
+    private String getUserIdFromPreferences(){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(PiwikDataManager.PREF_USER_ID, null);
     }
 }
