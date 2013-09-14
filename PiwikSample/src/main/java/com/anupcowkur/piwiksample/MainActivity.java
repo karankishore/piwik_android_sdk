@@ -13,6 +13,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PiwikClient.initPiwik(this, "http://www.mantish.com/piwik/piwik.php", null);
         PiwikClient.trackEvent(this, "onCreate", null);
     }
 
