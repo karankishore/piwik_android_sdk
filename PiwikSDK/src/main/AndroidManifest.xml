@@ -21,12 +21,12 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-    </application>
 
-    <provider
-        android:authorities="com.anupcowkur.piwiksdk.provider.piwikdbitems"
-        android:export="false"
-        android:name=".PiwikContentProvider"
-        android:syncable="true" />
+        <provider
+            android:authorities="com.anupcowkur.piwiksdk.provider.piwikdbitems"
+            android:name=".PiwikContentProvider"
+            android:syncable="true" />
+
+    </application>
 
 </manifest>
