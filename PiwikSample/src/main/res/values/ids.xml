@@ -15,11 +15,15 @@
   -->
 
 <resources>
-    <style name="DarkTheme" parent="android:Theme.Holo">
-        <item name="android:actionBarStyle">@style/DarkActionBar</item>
-    </style>
 
-    <style name="DarkActionBar" parent="android:Widget.Holo.ActionBar">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
+    <!--
+        These action bar item IDs (menu item IDs) are defined here for
+        programmatic use. Normally, IDs are created using the "@+id/foo"
+        syntax, but since these IDs aren't created in menu XML, rather
+        used for programmatically-instantiated action bar items, they
+        are defined here.
+    -->
+    <item type="id" name="action_next" />
+    <item type="id" name="action_flip" />
+
 </resources>

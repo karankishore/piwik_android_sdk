@@ -1,31 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
     package="com.anupcowkur.piwiksample"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="1"
     android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="17" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+
         <activity
-            android:name="com.anupcowkur.piwiksample.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".ActivityB"
-            android:label="Activity B" />
+            android:label="@string/title_crossfade"
+            android:name=".CrossfadeActivity"
+            android:parentActivityName=".MainActivity"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
         <activity
-            android:name=".ActivityC"
-            android:label="Activity C" />
+            android:label="@string/title_card_flip"
+            android:name=".CardFlipActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/DarkTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:label="@string/title_screen_slide"
+            android:name=".ScreenSlideActivity"
+            android:parentActivityName=".MainActivity"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:label="@string/title_zoom"
+            android:name=".ZoomActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:label="@string/title_layout_changes"
+            android:name=".LayoutChangesActivity"
+            android:parentActivityName=".MainActivity">>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

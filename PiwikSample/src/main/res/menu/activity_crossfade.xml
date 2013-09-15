@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Toggles between a content view and a loading indicator view. Real-world
+         applications should automatically toggle when content becomes available. -->
+    <item
+        android:id="@+id/action_toggle"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/action_toggle" />
+
+</menu>

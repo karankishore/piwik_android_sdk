@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Contains the "content" view and its children. -->
+    <include layout="@layout/excerpt_content" />
+
+    <!-- The "loading indicator" view. This view overlaps with
+         the content, so the visibility of these two views
+         should be mutually exclusive. -->
+    <ProgressBar
+        android:id="@+id/loading_spinner"
+        style="?android:progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>
