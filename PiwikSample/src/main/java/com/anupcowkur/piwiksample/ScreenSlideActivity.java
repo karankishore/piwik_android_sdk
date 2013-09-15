@@ -100,7 +100,7 @@ public class ScreenSlideActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            PiwikClient.trackEvent(ScreenSlideActivity.this, "ScreenSlide/Slide" + position + 1);
+            PiwikClient.trackEvent(ScreenSlideActivity.this, "ScreenSlide/Slide" + (position + 1));
             return ScreenSlidePageFragment.create(position);
         }
 
