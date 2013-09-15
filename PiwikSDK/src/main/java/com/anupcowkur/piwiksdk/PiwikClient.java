@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Map;
@@ -18,17 +17,19 @@ public class PiwikClient {
     public static void initPiwik(Context context, String serverUrl, String userId) {
         if (userId == null) {
             userId = generateUserId();
-            Log.d(PiwikClient.class.getName(), " userId: " + userId);
         }
-        storeServerUrlToPreferences(context, serverUrl, userId);
+        storeAuthInfo(context, serverUrl, userId);
         accountManager = AccountManager.get(context);
-        account = new Account("defaultAccount", "com.anupcowkur");
+        account = new Account(Authenticator.DEFAULT_ACCOUNT, Authenticator.ACCOUNT_TYPE);
         accountManager.addAccountExplicitly(account, null, null);
     }
 
-    private static void storeServerUrlToPreferences(Context context, String serverUrl, String userId) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_SERVER_URL, serverUrl).commit();
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_USER_ID, userId).commit();
+    /**
+     * Store the server url and user id in shared preferences.
+     */
+    private static void storeAuthInfo(Context context, String serverUrl, String userId) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SharedPreferenceKeys.PREF_SERVER_URL, serverUrl).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(SharedPreferenceKeys.PREF_USER_ID, userId).commit();
     }
 
     private static String generateUserId() {
@@ -36,22 +37,26 @@ public class PiwikClient {
         return new BigInteger(130, random).toString(16).substring(0, 16);
     }
 
-    public static void trackEvent(Context context, String eventInfo, Map<String, String> extraInfo) {
-        storeData(context, "/" + eventInfo, extraInfo);
+    /**
+     * Track user defined event.
+     *
+     * @param type      type of event. ex: "settings/color_change" would track the color_change button click event in settings screen.
+     * @param extraInfo a map of key-value tracking any extra information. ex: "DeviceVersion":"JellyBean".
+     */
+    public static void trackEvent(Context context, String type, Map<String, String> extraInfo) {
+        storeData(context, "/" + type, extraInfo);
     }
 
-    private static void storeData(Context context, String eventInfo, Map<String, String> extraInfo) {
-        new StoreDataTask(context, eventInfo, extraInfo).execute();
+    /**
+     * Stores the data in the local db in a background thread.
+     */
+    private static void storeData(Context context, String type, Map<String, String> extraInfo) {
+        new StoreDataTask(context, type, extraInfo).execute();
     }
 
-    public static void trackView(Context context, String viewInfo, Map<String, String> extraInfo) {
-
-    }
-
-    public static void trackCrash(Context context, String crashInfo, Map<String, String> extraInfo) {
-
-    }
-
+    /**
+     * Immediately sync data with server without waiting for automatic periodic sync.
+     */
     public static void syncImmediately() {
 
         Bundle extras = new Bundle();

@@ -2,6 +2,9 @@ package com.anupcowkur.piwiksdk;
 
 import com.koushikdutta.async.future.FutureCallback;
 
+/**
+ * Custom callback for network calls in sync adapter.
+ */
 public class PiwikCallback implements FutureCallback<String> {
 
     String columnName;

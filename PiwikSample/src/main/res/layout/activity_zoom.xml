@@ -30,7 +30,7 @@
                  "ToughHighlightImageButton" ImageButton subclass helps achieve this by drawing
                  the standard system "pressed" and "focused" overlay upon user interaction. -->
 
-            <com.example.android.animationsdemo.TouchHighlightImageButton
+            <com.anupcowkur.piwiksample.TouchHighlightImageButton
                 android:id="@+id/thumb_button_1"
                 android:layout_width="100dp"
                 android:layout_height="75dp"
@@ -39,7 +39,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/thumb1" />
 
-            <com.example.android.animationsdemo.TouchHighlightImageButton
+            <com.anupcowkur.piwiksample.TouchHighlightImageButton
                 android:id="@+id/thumb_button_2"
                 android:layout_width="100dp"
                 android:layout_height="75dp"

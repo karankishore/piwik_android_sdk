@@ -7,8 +7,14 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Bundle;
 
-//Stubbed out authenticator methods. Can be implemented later when authorized login is supported.
+/**
+ * Stubbed out authenticator methods. Will be implemented later when authorized login is supported.
+ */
 public class Authenticator extends AbstractAccountAuthenticator {
+
+    public static final String ACCOUNT_TYPE = "com.anupcowkur";
+    public static final String DEFAULT_ACCOUNT = "defaultAccount";
+
     public Authenticator(Context context) {
         super(context);
     }

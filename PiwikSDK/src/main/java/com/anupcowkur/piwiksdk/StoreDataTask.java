@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import java.util.Calendar;
 import java.util.Map;
 
@@ -24,43 +23,21 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         this.userId = getUserIdFromPreferences();
     }
 
+    private String getUserIdFromPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SharedPreferenceKeys.PREF_USER_ID, null);
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
-        PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
-        SQLiteDatabase sqLiteDatabase = piwikDataManager.getWritableDatabase();
+        PiwikDatabaseHelper piwikDatabaseHelper = PiwikDatabaseHelper.getInstance(context);
+        SQLiteDatabase sqLiteDatabase = piwikDatabaseHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PiwikDataManager.EVT_TABLE_COL_USER_ID, userId);
-        contentValues.put(PiwikDataManager.EVT_TABLE_COL_INFO, info);
-        contentValues.put(PiwikDataManager.EVT_TABLE_COL_EXTRA_INFO, prepareExtraInfo());
-        contentValues.put(PiwikDataManager.EVT_TABLE_COL_TIMESTAMP, getCurrentTimestamp());
-        sqLiteDatabase.insert(PiwikDataManager.EVT_TABLE, null, contentValues);
+        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_USER_ID, userId);
+        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_INFO, info);
+        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_EXTRA_INFO, prepareExtraInfo());
+        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_TIMESTAMP, getCurrentTimestamp());
+        sqLiteDatabase.insert(PiwikDatabaseHelper.EVT_TABLE, null, contentValues);
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        PiwikDataManager piwikDataManager = PiwikDataManager.getInstance(context);
-        SQLiteDatabase sqLiteDatabase = piwikDataManager.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + PiwikDataManager.EVT_TABLE, null);
-        if (cursor.moveToFirst()) {
-            while (cursor.isAfterLast() == false) {
-                Log.d(StoreDataTask.class.getName(), " rec: " + cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_INFO)));
-                cursor.moveToNext();
-            }
-        }
-        super.onPostExecute(aVoid);
-    }
-
-    private String getCurrentTimestamp() {
-        Calendar calendar = Calendar.getInstance();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("h=");
-        stringBuilder.append(calendar.get(Calendar.HOUR_OF_DAY));
-        stringBuilder.append("&m=");
-        stringBuilder.append(calendar.get(Calendar.MINUTE));
-        stringBuilder.append("&s=");
-        stringBuilder.append(calendar.get(Calendar.SECOND));
-        return stringBuilder.toString();
     }
 
     private String prepareExtraInfo() {
@@ -89,7 +66,29 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         return stringBuilder.toString();
     }
 
-    private String getUserIdFromPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(PiwikDataManager.PREF_USER_ID, null);
+    private String getCurrentTimestamp() {
+        Calendar calendar = Calendar.getInstance();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("h=");
+        stringBuilder.append(calendar.get(Calendar.HOUR_OF_DAY));
+        stringBuilder.append("&m=");
+        stringBuilder.append(calendar.get(Calendar.MINUTE));
+        stringBuilder.append("&s=");
+        stringBuilder.append(calendar.get(Calendar.SECOND));
+        return stringBuilder.toString();
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        PiwikDatabaseHelper piwikDatabaseHelper = PiwikDatabaseHelper.getInstance(context);
+        SQLiteDatabase sqLiteDatabase = piwikDatabaseHelper.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + PiwikDatabaseHelper.EVT_TABLE, null);
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Log.d(StoreDataTask.class.getName(), " rec: " + cursor.getString(cursor.getColumnIndex(PiwikDatabaseHelper.EVT_TABLE_COL_INFO)));
+                cursor.moveToNext();
+            }
+        }
+        super.onPostExecute(aVoid);
     }
 }

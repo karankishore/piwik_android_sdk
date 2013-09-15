@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.anupcowkur.piwiksdk.PiwikClient;
 
 public class MainActivity extends ListActivity {
 
@@ -20,6 +21,10 @@ public class MainActivity extends ListActivity {
         mSamples = new Sample[]{new Sample(R.string.title_crossfade, CrossfadeActivity.class), new Sample(R.string.title_card_flip, CardFlipActivity.class), new Sample(R.string.title_screen_slide, ScreenSlideActivity.class), new Sample(R.string.title_zoom, ZoomActivity.class), new Sample(R.string.title_layout_changes, LayoutChangesActivity.class),};
 
         setListAdapter(new ArrayAdapter<Sample>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mSamples));
+
+        PiwikClient.initPiwik(this, "http://www.mantish.com/piwik/piwik.php", null);
+        PiwikClient.trackEvent(this, "SampleHome", null);
+        PiwikClient.syncImmediately();
     }
 
     @Override
