@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class PiwikClient {
     private static AccountManager accountManager = null;
+    private static Account account = null;
 
     public static void initPiwik(Context context, String serverUrl, String userId) {
         if (userId == null) {
@@ -21,11 +22,8 @@ public class PiwikClient {
         }
         storeServerUrlToPreferences(context, serverUrl, userId);
         accountManager = AccountManager.get(context);
-    }
-
-    private static String generateUserId() {
-        SecureRandom random = new SecureRandom();
-        return new BigInteger(130, random).toString(16);
+        account = new Account("defaultAccount", "com.anupcowkur");
+        accountManager.addAccountExplicitly(account, null, null);
     }
 
     private static void storeServerUrlToPreferences(Context context, String serverUrl, String userId) {
@@ -33,8 +31,13 @@ public class PiwikClient {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_USER_ID, userId).commit();
     }
 
+    private static String generateUserId() {
+        SecureRandom random = new SecureRandom();
+        return new BigInteger(130, random).toString(16);
+    }
+
     public static void trackEvent(Context context, String eventInfo, Map<String, String> extraInfo) {
-        storeData(context, eventInfo, extraInfo);
+        storeData(context, "/" + eventInfo, extraInfo);
     }
 
     private static void storeData(Context context, String eventInfo, Map<String, String> extraInfo) {
@@ -49,18 +52,13 @@ public class PiwikClient {
 
     }
 
-    public static void syncImmediately(Context context) {
-        AccountManager am = AccountManager.get(context);
-        Account[] acc = am.getAccountsByType("com.anupcowkur");
-        Account account = null;
-        if (acc.length > 0) {
-            account = acc[0];
+    public static void syncImmediately() {
 
-            Bundle extras = new Bundle();
-            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 
-            ContentResolver.requestSync(account, PiwikContentProvider.AUTHORITY, extras);
-        }
+        ContentResolver.requestSync(account, PiwikContentProvider.AUTHORITY, extras);
+
     }
 }

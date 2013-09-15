@@ -3,9 +3,8 @@ package com.anupcowkur.piwiksample;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
-
+import android.view.MenuItem;
 import com.anupcowkur.piwiksdk.PiwikClient;
-
 
 public class MainActivity extends Activity {
 
@@ -14,9 +13,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PiwikClient.initPiwik(this, "http://www.mantish.com/piwik/piwik.php", null);
-        PiwikClient.trackEvent(this, "onCreate", null);
+        PiwikClient.trackEvent(this, "home", null);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -25,4 +23,14 @@ public class MainActivity extends Activity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                PiwikClient.syncImmediately();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

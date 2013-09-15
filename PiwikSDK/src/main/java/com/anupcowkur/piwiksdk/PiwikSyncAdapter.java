@@ -10,10 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-
 import java.util.ArrayList;
 
 public class PiwikSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -30,7 +27,6 @@ public class PiwikSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, final ContentProviderClient provider, SyncResult syncResult) {
 
-        ArrayList<String> localDbItems = new ArrayList();
         Cursor curDbItems = null;
         try {
             curDbItems = provider.query(PiwikContentProvider.PiwikDbItems.CONTENT_URI, PiwikContentProvider.PiwikDbItems.PROJECTION_ALL, null, null, null);
@@ -38,36 +34,39 @@ public class PiwikSyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
         if (curDbItems != null) {
+            ArrayList<String> indices = new ArrayList<String>();
             while (curDbItems.moveToNext()) {
-                final Cursor finalCurDbItems = curDbItems;
-                Ion.with(getContext(), getRequestUrl(curDbItems)).asString().setCallback(new FutureCallback<String>() {
+                indices.add(curDbItems.getString(curDbItems.getColumnIndex("_id")));
+                String url = getRequestUrl(curDbItems);
+                Ion.with(getContext(), url).asString().setCallback(new PiwikCallback(curDbItems.getString(curDbItems.getColumnIndex("_id"))) {
                     @Override
                     public void onCompleted(Exception e, String s) {
                         if (e == null) {
                             try {
-                                provider.delete(PiwikContentProvider.PiwikDbItems.CONTENT_URI, PiwikContentProvider.PiwikDbItems._ID + " = ? ", new String[]{finalCurDbItems.getString(finalCurDbItems.getColumnIndex("_id"))});
+                                provider.delete(PiwikContentProvider.PiwikDbItems.CONTENT_URI, PiwikContentProvider.PiwikDbItems._ID + " = ? ", new String[]{columnName});
                             } catch (RemoteException e1) {
                             }
                         }
 
                     }
                 });
+
             }
             curDbItems.close();
-        }
-
-        for (String url : localDbItems) {
-            Ion.with(getContext(), url);
         }
 
     }
 
     String getRequestUrl(Cursor cursor) {
         String id = cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_USER_ID));
-        String type = cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_USER_ID));
-        String extraInfo = cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_USER_ID));
+        String type = cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_INFO));
+        String extraInfo = cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_EXTRA_INFO));
         String timestamp = cursor.getString(cursor.getColumnIndex(PiwikDataManager.EVT_TABLE_COL_TIMESTAMP));
 
-        return serverUrl + type + "?" + timestamp + "&_id=" + id + "&_cvar={" + extraInfo + "}";
+        String returnUrl = serverUrl + "?" + "idsite=1&rec=1&url=" + type + "&" + timestamp + "&_id=" + id;
+        if (id.equals(""))
+            returnUrl += "&_cvar={" + extraInfo + "}";
+
+        return returnUrl;
     }
 }
