@@ -36,6 +36,7 @@ public class PiwikSyncAdapter extends AbstractThreadedSyncAdapter {
             while (curDbItems.moveToNext()) {
                 indices.add(curDbItems.getString(curDbItems.getColumnIndex(PiwikDatabaseHelper.EV_TABLE_COL_ID)));
                 String url = getRequestUrl(curDbItems);
+                url.hashCode();
                 Ion.with(getContext(), url).asString().setCallback(new PiwikCallback(curDbItems.getString(curDbItems.getColumnIndex(PiwikDatabaseHelper.EV_TABLE_COL_ID))) {
                     @Override
                     public void onCompleted(Exception e, String s) {
@@ -64,8 +65,8 @@ public class PiwikSyncAdapter extends AbstractThreadedSyncAdapter {
         String extraInfo = cursor.getString(cursor.getColumnIndex(PiwikDatabaseHelper.EVT_TABLE_COL_EXTRA_INFO));
         String timestamp = cursor.getString(cursor.getColumnIndex(PiwikDatabaseHelper.EVT_TABLE_COL_TIMESTAMP));
 
-        String returnUrl = serverUrl + "?" + "idsite=1&rec=1&url=" + type + "&" + timestamp + "&_id=" + id;
-        if (id.equals(""))
+        String returnUrl = serverUrl + "?" + "idsite=1&rec=1&url=http://example.com" + type + "&" + timestamp + "&_id=" + id + "&rand=" + Math.random() * Math.random();
+        if (!extraInfo.equals(""))
             returnUrl += "&_cvar={" + extraInfo + "}";
 
         return returnUrl;
