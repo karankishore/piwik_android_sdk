@@ -10,6 +10,7 @@ import android.util.Log;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Map;
+import java.util.Random;
 
 public class PiwikClient {
     private static AccountManager accountManager = null;
@@ -26,14 +27,14 @@ public class PiwikClient {
         accountManager.addAccountExplicitly(account, null, null);
     }
 
+    private static String generateUserId() {
+        SecureRandom random = new SecureRandom();
+        return new BigInteger(130, random).toString(16).substring(0, 16);
+    }
+
     private static void storeServerUrlToPreferences(Context context, String serverUrl, String userId) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_SERVER_URL, serverUrl).commit();
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PiwikDataManager.PREF_USER_ID, userId).commit();
-    }
-
-    private static String generateUserId() {
-        SecureRandom random = new SecureRandom();
-        return new BigInteger(130, random).toString(16);
     }
 
     public static void trackEvent(Context context, String eventInfo, Map<String, String> extraInfo) {
@@ -59,6 +60,5 @@ public class PiwikClient {
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 
         ContentResolver.requestSync(account, PiwikContentProvider.AUTHORITY, extras);
-
     }
 }
