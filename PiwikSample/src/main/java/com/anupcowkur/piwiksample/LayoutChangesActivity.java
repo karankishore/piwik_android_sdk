@@ -73,10 +73,7 @@ public class LayoutChangesActivity extends Activity {
         // Set the text in the new row to a random country.
         ((TextView) newView.findViewById(android.R.id.text1)).setText(country);
 
-        final HashMap<String, String> map = new HashMap<String, String>();
-        map.put("Country", country);
-
-        PiwikClient.trackEvent(this, "List/Add", map);
+        PiwikClient.trackEvent(this, "List/Add");
 
         // Set a click listener for the "X" button in the row that will remove the row.
         newView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
@@ -87,7 +84,7 @@ public class LayoutChangesActivity extends Activity {
                 // this removal is automatically animated.
                 mContainerView.removeView(newView);
 
-                PiwikClient.trackEvent(LayoutChangesActivity.this, "List/Remove", map);
+                PiwikClient.trackEvent(LayoutChangesActivity.this, "List/Remove");
 
                 // If there are no rows remaining, show the empty view.
                 if (mContainerView.getChildCount() == 0) {

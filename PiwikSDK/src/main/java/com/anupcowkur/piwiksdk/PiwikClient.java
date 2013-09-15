@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Map;
 
 public class PiwikClient {
     private static AccountManager accountManager = null;
@@ -40,18 +39,17 @@ public class PiwikClient {
     /**
      * Track user defined event.
      *
-     * @param type      type of event. ex: "settings/color_change" would track the color_change button click event in settings screen.
-     * @param extraInfo a map of key-value tracking any extra information. ex: "DeviceVersion":"JellyBean".
+     * @param type type of event. ex: "settings/color_change" would track the color_change button click event in settings screen.
      */
-    public static void trackEvent(Context context, String type, Map<String, String> extraInfo) {
-        storeData(context, "/" + type, extraInfo);
+    public static void trackEvent(Context context, String type) {
+        storeData(context, "/" + type);
     }
 
     /**
      * Stores the data in the local db in a background thread.
      */
-    private static void storeData(Context context, String type, Map<String, String> extraInfo) {
-        new StoreDataTask(context, type, extraInfo).execute();
+    private static void storeData(Context context, String type) {
+        new StoreDataTask(context, type).execute();
     }
 
     /**

@@ -8,18 +8,15 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import java.util.Calendar;
-import java.util.Map;
 
 public class StoreDataTask extends AsyncTask<Void, Void, Void> {
 
     private Context context;
-    private String info, userId;
-    private Map<String, String> extraInfo;
+    private String type, userId;
 
-    public StoreDataTask(Context context, String info, Map<String, String> extraInfo) {
+    public StoreDataTask(Context context, String type) {
         this.context = context;
-        this.info = info;
-        this.extraInfo = extraInfo;
+        this.type = type;
         this.userId = getUserIdFromPreferences();
     }
 
@@ -33,37 +30,10 @@ public class StoreDataTask extends AsyncTask<Void, Void, Void> {
         SQLiteDatabase sqLiteDatabase = piwikDatabaseHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_USER_ID, userId);
-        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_INFO, info);
-        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_EXTRA_INFO, prepareExtraInfo());
+        contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_INFO, type);
         contentValues.put(PiwikDatabaseHelper.EVT_TABLE_COL_TIMESTAMP, getCurrentTimestamp());
         sqLiteDatabase.insert(PiwikDatabaseHelper.EVT_TABLE, null, contentValues);
         return null;
-    }
-
-    private String prepareExtraInfo() {
-        int index = 0;
-        StringBuilder stringBuilder = new StringBuilder();
-        if (extraInfo != null) {
-            for (Map.Entry<String, String> cursor : extraInfo.entrySet()) {
-                stringBuilder.append("\"");
-                stringBuilder.append(++index);
-                stringBuilder.append("\"");
-                stringBuilder.append(":");
-                stringBuilder.append("[");
-                stringBuilder.append("\"");
-                stringBuilder.append(cursor.getKey());
-                stringBuilder.append("\"");
-                stringBuilder.append(",");
-                stringBuilder.append("\"");
-                stringBuilder.append(cursor.getValue());
-                stringBuilder.append("\"");
-                stringBuilder.append("]");
-                if (extraInfo.size() > 1) {
-                    stringBuilder.append(",");
-                }
-            }
-        }
-        return stringBuilder.toString();
     }
 
     private String getCurrentTimestamp() {

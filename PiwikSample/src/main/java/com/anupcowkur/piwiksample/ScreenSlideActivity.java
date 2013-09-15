@@ -32,7 +32,7 @@ public class ScreenSlideActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
 
-        PiwikClient.trackEvent(this, "ScreenSlide/Enter", null);
+        PiwikClient.trackEvent(this, "ScreenSlide/Enter");
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -100,7 +100,7 @@ public class ScreenSlideActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            PiwikClient.trackEvent(ScreenSlideActivity.this, "ScreenSlide/Slide" + position + 1, null);
+            PiwikClient.trackEvent(ScreenSlideActivity.this, "ScreenSlide/Slide" + position + 1);
             return ScreenSlidePageFragment.create(position);
         }
 

@@ -84,12 +84,12 @@ public class CardFlipActivity extends Activity implements FragmentManager.OnBack
     private void flipCard() {
         if (mShowingBack) {
             getFragmentManager().popBackStack();
-            PiwikClient.trackEvent(this, "CardFlip/Front", null);
+            PiwikClient.trackEvent(this, "CardFlip/Front");
             return;
         }
 
         // Flip to the back.
-        PiwikClient.trackEvent(this, "CardFlip/Back", null);
+        PiwikClient.trackEvent(this, "CardFlip/Back");
         mShowingBack = true;
 
         // Create and commit a new fragment transaction that adds the fragment for the back of

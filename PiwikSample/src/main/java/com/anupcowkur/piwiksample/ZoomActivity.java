@@ -71,7 +71,7 @@ public class ZoomActivity extends FragmentActivity {
      * @param imageResId The high-resolution version of the image represented by the thumbnail.
      */
     private void zoomImageFromThumb(final View thumbView, int imageResId) {
-        PiwikClient.trackEvent(this, "Zoom/ZoomIn", null);
+        PiwikClient.trackEvent(this, "Zoom/ZoomIn");
         // If there's an animation in progress, cancel it immediately and proceed with this one.
         if (mCurrentAnimator != null) {
             mCurrentAnimator.cancel();
@@ -156,7 +156,7 @@ public class ZoomActivity extends FragmentActivity {
                 if (mCurrentAnimator != null) {
                     mCurrentAnimator.cancel();
                 }
-                PiwikClient.trackEvent(ZoomActivity.this, "Zoom/ZoomOut", null);
+                PiwikClient.trackEvent(ZoomActivity.this, "Zoom/ZoomOut");
 
                 // Animate the four positioning/sizing properties in parallel, back to their
                 // original values.
