@@ -12,14 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import com.anupcowkur.piwiksdk.PiwikClient;
 
-/**
- * Demonstrates a "card-flip" animation using custom fragment transactions ({@link
- * android.app.FragmentTransaction#setCustomAnimations(int, int)}).
- * <p>This sample shows an "info" action bar button that shows the back of a "card", rotating the
- * front of the card out and the back of the card in. The reverse animation is played when the user
- * presses the system Back button or the "photo" action bar button.</p>
- */
 public class CardFlipActivity extends Activity implements FragmentManager.OnBackStackChangedListener {
     /**
      * A handler object, used for deferring UI operations.
@@ -58,6 +52,11 @@ public class CardFlipActivity extends Activity implements FragmentManager.OnBack
         MenuItem item = menu.add(Menu.NONE, R.id.action_flip, Menu.NONE, mShowingBack ? R.string.action_photo : R.string.action_info);
         item.setIcon(mShowingBack ? R.drawable.ic_action_photo : R.drawable.ic_action_info);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        // add a sync action item.
+        MenuItem syncItem = menu.add(Menu.NONE, R.id.action_sync, Menu.NONE, R.string.action_sync);
+        syncItem.setIcon(R.drawable.ic_action_sync);
+        syncItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
 
@@ -73,6 +72,10 @@ public class CardFlipActivity extends Activity implements FragmentManager.OnBack
             case R.id.action_flip:
                 flipCard();
                 return true;
+
+            case R.id.action_sync:
+                PiwikClient.syncImmediately();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -81,11 +84,12 @@ public class CardFlipActivity extends Activity implements FragmentManager.OnBack
     private void flipCard() {
         if (mShowingBack) {
             getFragmentManager().popBackStack();
+            PiwikClient.trackEvent(this, "CardFlip/Front", null);
             return;
         }
 
         // Flip to the back.
-
+        PiwikClient.trackEvent(this, "CardFlip/Back", null);
         mShowingBack = true;
 
         // Create and commit a new fragment transaction that adds the fragment for the back of

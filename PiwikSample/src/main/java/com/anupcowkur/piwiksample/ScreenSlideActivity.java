@@ -10,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.anupcowkur.piwiksdk.PiwikClient;
 
 public class ScreenSlideActivity extends FragmentActivity {
     /**
@@ -30,6 +31,8 @@ public class ScreenSlideActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
+
+        PiwikClient.trackEvent(this, "ScreenSlide/Enter", null);
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -97,6 +100,7 @@ public class ScreenSlideActivity extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
+            PiwikClient.trackEvent(ScreenSlideActivity.this, "ScreenSlide/Slide" + position + 1, null);
             return ScreenSlidePageFragment.create(position);
         }
 

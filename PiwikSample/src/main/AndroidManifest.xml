@@ -24,16 +24,6 @@
         </activity>
 
         <activity
-            android:label="@string/title_crossfade"
-            android:name=".CrossfadeActivity"
-            android:parentActivityName=".MainActivity"
-            android:uiOptions="splitActionBarWhenNarrow">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-
-        <activity
             android:label="@string/title_card_flip"
             android:name=".CardFlipActivity"
             android:parentActivityName=".MainActivity"

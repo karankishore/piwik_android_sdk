@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -11,6 +13,7 @@ import com.anupcowkur.piwiksdk.PiwikClient;
 
 public class MainActivity extends ListActivity {
 
+    private static final String SERVER_URL = "http://www.mantish.com/piwik/piwik.php";
     private static Sample[] mSamples;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -18,13 +21,30 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         // Instantiate the list of samples.
-        mSamples = new Sample[]{new Sample(R.string.title_crossfade, CrossfadeActivity.class), new Sample(R.string.title_card_flip, CardFlipActivity.class), new Sample(R.string.title_screen_slide, ScreenSlideActivity.class), new Sample(R.string.title_zoom, ZoomActivity.class), new Sample(R.string.title_layout_changes, LayoutChangesActivity.class),};
+        mSamples = new Sample[]{new Sample(R.string.title_card_flip, CardFlipActivity.class), new Sample(R.string.title_screen_slide, ScreenSlideActivity.class), new Sample(R.string.title_zoom, ZoomActivity.class), new Sample(R.string.title_layout_changes, LayoutChangesActivity.class),};
 
         setListAdapter(new ArrayAdapter<Sample>(this, android.R.layout.simple_list_item_1, android.R.id.text1, mSamples));
 
-        PiwikClient.initPiwik(this, "http://www.mantish.com/piwik/piwik.php", null);
-        PiwikClient.trackEvent(this, "SampleHome", null);
-        PiwikClient.syncImmediately();
+        PiwikClient.initPiwik(this, SERVER_URL, null);
+        PiwikClient.trackEvent(this, "Home/Enter", null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sync:
+                PiwikClient.syncImmediately();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -2,7 +2,6 @@
 
     <!-- Titles -->
     <string name="app_name">Piwik Sample</string>
-    <string name="title_crossfade">Simple Crossfade</string>
     <string name="title_card_flip">Card Flip</string>
     <string name="title_screen_slide">Screen Slide</string>
     <string name="title_zoom">Zoom</string>
@@ -11,7 +10,7 @@
         Ipsum</string>
 
     <!-- Actions -->
-    <string name="action_toggle">Toggle indicator</string>
+    <string name="action_sync">Sync</string>
     <string name="action_add_item">Add item</string>
     <string name="action_remove_item">Remove item</string>
     <string name="action_previous">Previous</string>

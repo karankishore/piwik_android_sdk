@@ -12,14 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.anupcowkur.piwiksdk.PiwikClient;
+import java.util.HashMap;
 
-/**
- * This sample demonstrates how to use system-provided, automatic layout transitions. Layout
- * transitions are animations that occur when views are added to, removed from, or changed within
- * a {@link ViewGroup}.
- * <p>In this sample, the user can add rows to and remove rows from a vertical
- * {@link android.widget.LinearLayout}.</p>
- */
 public class LayoutChangesActivity extends Activity {
     /**
      * A static list of country names.
@@ -60,6 +55,10 @@ public class LayoutChangesActivity extends Activity {
                 findViewById(android.R.id.empty).setVisibility(View.GONE);
                 addItem();
                 return true;
+
+            case R.id.action_sync:
+                PiwikClient.syncImmediately();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -69,8 +68,15 @@ public class LayoutChangesActivity extends Activity {
         // Instantiate a new "row" view.
         final ViewGroup newView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.list_item_example, mContainerView, false);
 
+        String country = COUNTRIES[(int) (Math.random() * COUNTRIES.length)];
+
         // Set the text in the new row to a random country.
-        ((TextView) newView.findViewById(android.R.id.text1)).setText(COUNTRIES[(int) (Math.random() * COUNTRIES.length)]);
+        ((TextView) newView.findViewById(android.R.id.text1)).setText(country);
+
+        final HashMap<String, String> map = new HashMap<String, String>();
+        map.put("Country", country);
+
+        PiwikClient.trackEvent(this, "List/Add", map);
 
         // Set a click listener for the "X" button in the row that will remove the row.
         newView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
@@ -80,6 +86,8 @@ public class LayoutChangesActivity extends Activity {
                 // Because mContainerView has android:animateLayoutChanges set to true,
                 // this removal is automatically animated.
                 mContainerView.removeView(newView);
+
+                PiwikClient.trackEvent(LayoutChangesActivity.this, "List/Remove", map);
 
                 // If there are no rows remaining, show the empty view.
                 if (mContainerView.getChildCount() == 0) {

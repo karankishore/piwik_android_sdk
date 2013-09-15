@@ -10,10 +10,12 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import com.anupcowkur.piwiksdk.PiwikClient;
 
 public class ZoomActivity extends FragmentActivity {
     /**
@@ -69,6 +71,7 @@ public class ZoomActivity extends FragmentActivity {
      * @param imageResId The high-resolution version of the image represented by the thumbnail.
      */
     private void zoomImageFromThumb(final View thumbView, int imageResId) {
+        PiwikClient.trackEvent(this, "Zoom/ZoomIn", null);
         // If there's an animation in progress, cancel it immediately and proceed with this one.
         if (mCurrentAnimator != null) {
             mCurrentAnimator.cancel();
@@ -153,6 +156,7 @@ public class ZoomActivity extends FragmentActivity {
                 if (mCurrentAnimator != null) {
                     mCurrentAnimator.cancel();
                 }
+                PiwikClient.trackEvent(ZoomActivity.this, "Zoom/ZoomOut", null);
 
                 // Animate the four positioning/sizing properties in parallel, back to their
                 // original values.
@@ -182,12 +186,23 @@ public class ZoomActivity extends FragmentActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_zoom, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // Navigate "up" the demo structure to the launchpad activity.
                 // See http://developer.android.com/design/patterns/navigation.html for more.
                 NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
+                return true;
+
+            case R.id.action_sync:
+                PiwikClient.syncImmediately();
                 return true;
         }
 
