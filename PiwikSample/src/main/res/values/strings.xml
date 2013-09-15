@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PiwikSample</string>
     <string name="action_sync">Sync</string>
+    <string name="app_name">Piwik Client</string>
 
 </resources>

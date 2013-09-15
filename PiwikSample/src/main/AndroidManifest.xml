@@ -5,7 +5,7 @@
     android:versionName="1.0">
 
     <uses-sdk
-        android:minSdkVersion="7"
+        android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
     <application
@@ -20,6 +20,12 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ActivityB"
+            android:label="Activity B" />
+        <activity
+            android:name=".ActivityC"
+            android:label="Activity C" />
     </application>
 
 </manifest>
